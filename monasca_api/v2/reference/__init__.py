@@ -18,6 +18,7 @@ from oslo_config import cfg
 from oslo_config import types
 from oslo_db import options
 
+from monasca_api.conf import cassandra
 
 """Configurations for reference implementation
 
@@ -142,11 +143,7 @@ influxdb_group = cfg.OptGroup(name='influxdb', title='influxdb')
 cfg.CONF.register_group(influxdb_group)
 cfg.CONF.register_opts(influxdb_opts, influxdb_group)
 
-cassandra_opts = [cfg.ListOpt('contact_points'), cfg.StrOpt('keyspace')]
-
-cassandra_group = cfg.OptGroup(name='cassandra', title='cassandra')
-cfg.CONF.register_group(cassandra_group)
-cfg.CONF.register_opts(cassandra_opts, cassandra_group)
+cassandra.register_opts(cfg.CONF)
 
 
 def register_database_opts():
