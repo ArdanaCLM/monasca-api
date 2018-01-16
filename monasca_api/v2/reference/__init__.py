@@ -18,7 +18,6 @@ from oslo_config import cfg
 from oslo_config import types
 from oslo_db import options
 
-
 """Configurations for reference implementation
 
 I think that these configuration parameters should have been split into
@@ -142,7 +141,27 @@ influxdb_group = cfg.OptGroup(name='influxdb', title='influxdb')
 cfg.CONF.register_group(influxdb_group)
 cfg.CONF.register_opts(influxdb_opts, influxdb_group)
 
-cassandra_opts = [cfg.ListOpt('contact_points'), cfg.StrOpt('keyspace')]
+cassandra_opts = [
+    cfg.ListOpt('contact_points',
+                default=['127.0.0.1'],
+                item_type=types.HostAddress(),
+                help='''
+Comma separated list of Cassandra node IP addresses
+'''),
+    cfg.StrOpt('keyspace',
+               default='monasca',
+               help='''
+keyspace where metric are stored
+'''),
+    cfg.StrOpt('user', default='',
+               help='''
+Cassandra user for monasca-api service
+'''),
+    cfg.StrOpt('password', default='', secret=True,
+               help='''
+Cassandra user password for monasca-api service
+''')
+]
 
 cassandra_group = cfg.OptGroup(name='cassandra', title='cassandra')
 cfg.CONF.register_group(cassandra_group)
